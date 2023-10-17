@@ -28,6 +28,10 @@ class Poly_multiplier:
             offset+=1
         return poly_result
 
+    def multiply_fft(self):
+        #TODO
+        pass
+
     def print_poly(polynomial):
         str_poly = ''
         polynomial.reverse()
