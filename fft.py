@@ -1,6 +1,6 @@
 import random
 import math
-
+import sys
 class Poly_multiplier:
     def __init__(self, poly1, poly2):
         self.poly1 = poly1
@@ -90,21 +90,36 @@ def read_txt(file):
                 poly2.append(coef2)
         return Poly_multiplier(poly1, poly2)
 
-def gen_polynomial_txts():
-    with open('grado10.txt', 'w') as f:
-        for i in range(10):
+def gen_polynomial_txts(grado):
+    with open('grado'+str(grado)+'.txt', 'w') as f:
+        for i in range(grado):
             f.write(str(random.randint(0, 1000)) + ' ' + str(random.randint(0, 1000)) + '\n')
-    with open('grado100.txt', 'w') as f:
-        for i in range(100):
-            f.write(str(random.randint(0, 1000)) + ' ' + str(random.randint(0, 1000)) + '\n')
-    with open('grado1000.txt', 'w') as f:
-        for i in range(1000):
-            f.write(str(random.randint(0, 1000)) + ' ' + str(random.randint(0, 1000)) + '\n')
-
 
 if __name__ == '__main__':
-    gen_polynomial_txts()
-    multiplier = read_txt('grado3.txt')
-    multiplied = multiplier.multiply_convolute()
-    print("Resultado")
-    multiplier.print_poly(multiplied)
+    num = int(input("Subio un archivo con el polinomio (1) o desea generar un polinomio (2): "))
+    if num == 1:
+      file_path = sys.argv[1]
+    elif num == 2:
+      grado = int(input("Defina el grado del polinomio que desea generar: ")) # 5
+      gen_polynomial_txts(grado)
+      file_path = 'grado'+str(grado)+'.txt'
+      print("Polinomio de grado" + str(num) + "aleatorio generado")
+    try:
+        alg = int(input("¿Qué algoritmo desea correr? Directo (1), ttf (2): "))
+        if alg == 1:
+            multiplier = read_txt(file_path)
+            multiplied = multiplier.multiply_convolute()
+            print("Resultado")
+            multiplier.print_poly(multiplied)
+        elif alg == 2:
+            multiplier = read_txt(file_path)
+            multiplied = multiplier.multiply_fft()
+            print("Resultado")
+            multiplier.print_poly(multiplied)
+        else:
+            print("Opción no válida")
+            
+    except FileNotFoundError:
+        print("El archivo no se encontró en la ruta especificada.")
+    except Exception as e:
+        print("Ocurrió un error:", e)
