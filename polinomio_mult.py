@@ -40,9 +40,7 @@ class Poly_multiplier:
             sample_multiplied.append(sample_poly1[i]*sample_poly2[i])
         
         #hacemos la fft
-        #TODO
-
-
+        # TODO: 
 
 
     def sample_points(n, poly):
