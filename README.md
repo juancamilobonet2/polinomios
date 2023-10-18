@@ -45,7 +45,7 @@ Subio un archivo con el polinomio (1) o desea generar un polinomio (2): 1
 
 Posteriormente saldrá como input lo siguiente, donde puede seleccionar 1 o 2 dependiendo de su eleccion:
 ```bash
-Subio un archivo con la matriz (1) o desea generar un grafo (2): 1
+¿Qué algoritmo desea correr? Directo (1), ttf (2): 1
 ```
 
 El resultado a continuacion será algo del estilo:
