@@ -29,8 +29,31 @@ class Poly_multiplier:
         return poly_result
 
     def multiply_fft(self):
+        degree = len(self.poly1) + len(self.poly2) - 2
+        #sampleamos puntos
+        sample_poly1 = Poly_multiplier.sample_points(degree+1, self.poly1)
+        sample_poly2 = Poly_multiplier.sample_points(degree+1, self.poly2)
+
+        #multiplicamos los puntos
+        sample_multiplied = []
+        for i in range(len(sample_poly1)):
+            sample_multiplied.append(sample_poly1[i]*sample_poly2[i])
+        
+        #hacemos la fft
         #TODO
-        pass
+
+
+
+
+    def sample_points(n, poly):
+        points = []
+        for i in range(n):
+            x = i
+            y = 0
+            for j in range(len(poly)):
+                y += poly[j]*x**j
+            points.append(y)
+        return points
 
     def print_poly(polynomial):
         str_poly = ''
