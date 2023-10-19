@@ -1,6 +1,8 @@
 import random
 import math
 import sys
+import time
+
 class Poly_multiplier:
     def __init__(self, poly1, poly2):
         self.poly1 = poly1
@@ -113,15 +115,21 @@ if __name__ == '__main__':
     try:
         alg = int(input("¿Qué algoritmo desea correr? Directo (1), ttf (2): "))
         if alg == 1:
+            t0 = time.time()
             multiplier = read_txt(file_path)
             multiplied = multiplier.multiply_convolute()
             print("Resultado")
             multiplier.print_poly(multiplied)
+            tf = time.time()
+            print("Tiempo de ejecución: ", tf-t0)
         elif alg == 2:
+            t0 = time.time()
             multiplier = read_txt(file_path)
             multiplied = multiplier.multiply_fft()
             print("Resultado")
             multiplier.print_poly(multiplied)
+            tf = time.time()
+            print("Tiempo de ejecución: ", tf-t0)
         else:
             print("Opción no válida")
             
