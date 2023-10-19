@@ -61,7 +61,9 @@ class Poly_multiplier:
 
         result = [round(x.real) for x in fa]
         result.reverse()
-        return result[3:-1]
+        arr_sin_ceros = [x for x in result if x != 0]
+        print(arr_sin_ceros)
+        return arr_sin_ceros
 
     def sample_points(self, n, poly):
         points = []
