@@ -22,42 +22,46 @@ class Poly_multiplier:
         poly_result.reverse()
         return poly_result
     
-    def fft(self, x, inverse=False):
-        N = len(x)
-        if N <= 1:
-            return x
-        even = self.fft(x[0::2], inverse)
-        odd = self.fft(x[1::2], inverse)
-        T = [math.e**(-2j*math.pi*k/N) for k in range(N // 2)]
-        if inverse:
-            T = [1/t for t in T]
-        return [even[k] + T[k] * odd[k] for k in range(N // 2)] + \
-               [even[k] - T[k] * odd[k] for k in range(N // 2)]
+    def fft(self, a, invert):
+        n = len(a)
+        if n == 1:
+            return
+
+        a0 = a[::2]
+        a1 = a[1::2]
+        self.fft(a0, invert)
+        self.fft(a1, invert)
+
+        ang = 2 * math.pi / n * (-1 if invert else 1)
+        w = complex(1, 0)
+        wn = complex(math.cos(ang), math.sin(ang))
+        
+        for i in range(n // 2):
+            a[i] = a0[i] + w * a1[i]
+            a[i + n // 2] = a0[i] - w * a1[i]
+            if invert:
+                a[i] /= 2
+                a[i + n // 2] /= 2
+            w *= wn
 
     def multiply_fft(self):
-        degree = len(self.poly1) + len(self.poly2) - 2
+        fa = self.poly1[:]
+        fb = self.poly2[:]
         n = 1
-        while n < 2 * (degree + 1):
-            n *= 2
+        while n < len(self.poly1) + len(self.poly2):
+            n <<= 1
+        fa += [0] * (n - len(fa))
+        fb += [0] * (n - len(fb))
 
-        # Sample and pad to a power of 2
-        sample_poly1 = self.sample_points(n, self.poly1)
-        sample_poly2 = self.sample_points(n, self.poly2)
+        self.fft(fa, False)
+        self.fft(fb, False)
+        for i in range(n):
+            fa[i] *= fb[i]
+        self.fft(fa, True)
 
-        # Perform FFT on the padded data
-        fft_poly1 = self.fft(sample_poly1)
-        fft_poly2 = self.fft(sample_poly2)
-
-        # Pointwise multiplication
-        fft_multiplied = [a * b for a, b in zip(fft_poly1, fft_poly2)]
-
-        # Inverse FFT to get the polynomial result
-        poly_result = self.fft(fft_multiplied, inverse=True)
-
-        # Trim the result to the original size
-        poly_result = poly_result[:degree + 1]
-
-        return poly_result
+        result = [round(x.real) for x in fa]
+        result.reverse()
+        return result[3:-1]
 
     def sample_points(self, n, poly):
         points = []
